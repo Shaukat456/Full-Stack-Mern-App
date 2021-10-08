@@ -1,21 +1,21 @@
 const express =require("express");
 const app=express();
 const mongoose=require("mongoose");
+const dotEnv=require("dotenv")
 
-const DB='mongodb+srv://Shaukat:31429860@cluster0.7tqxz.mongodb.net/MernStack?retryWrites=true&w=majority';
+const User=require("./Database Design/user")
+
+const Port=process.env.PORT;
+
+app.use(express.json())
+
+dotEnv.config({path :"./config.env"})
+require("./Db/Connection")
+
+// router file to make rout  easy
+app.use(require("./router/auth"))
 
 
-mongoose.connect(DB,{
-    useNewUrlParser:true,
-    // useCreateIndex:true,
-    // useUnifiedTopology:true,
-    // useFindAndModify:false
-}).then(()=>{
-    console.log("connected to DB")
-    
-}).catch((E)=>{
-    console.log(E,"error")
-})
 
 
 
@@ -24,13 +24,13 @@ const MiddleWare=(req,res,next)=>{
     next()
 }
 
-app.get("/d", MiddleWare, (req,res)=>{
+app.get("/", MiddleWare, (req,res)=>{
     res.send("hello  world")
 })
 
 
 
 
-app.listen(80,()=>{
-    console.log('server is running ')
+app.listen(process.env.PORT,()=>{
+    console.log('server is running on ' )
 })
