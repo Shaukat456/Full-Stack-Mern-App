@@ -17,6 +17,8 @@ mongoose.connect(DB,{
     console.log(E,"error")
 })
 
+
+
 const MiddleWare=(req,res,next)=>{
     console.log("middle ware");
     next()
