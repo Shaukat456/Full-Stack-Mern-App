@@ -50,6 +50,8 @@ UserSchema.pre("save", async function(next) {
 // res.send("pre method called")
 // })
 
+
+
 const User=mongoose.model("USER",  UserSchema )
 
 module.exports=User;
