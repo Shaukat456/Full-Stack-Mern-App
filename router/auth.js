@@ -1,5 +1,5 @@
 const express =require("express")
-
+const bcrypt=require("bcryptjs")
 const router=express.Router();
 
 const User =require("../Database Design/user")
@@ -16,7 +16,7 @@ router.post("/register", (req,res)=>{
     const {name ,email,password,confpassword}=req.body
     
     
-if( !name ||  !email  || !password   ||  !confpassword         ){
+if( !name ||  !email  || !password   ||  !confpassword  ){
     return res.send("please fill all the fields")
 }
 
@@ -29,6 +29,9 @@ if( !name ||  !email  || !password   ||  !confpassword         ){
      }
 
      const user=new User({ name ,email,password,confpassword  })
+
+
+     
       user.save().then((u)=>{
           //   console.log("user created")
           return [console.log(u),res.send(u)]
