@@ -3,7 +3,8 @@ const app=express();
 const mongoose=require("mongoose");
 const dotEnv=require("dotenv")
 
-const User=require("./Database Design/user")
+const User=require("./Database Design/user");
+const jwt=require("jsonwebtoken")
 
 const Port=process.env.PORT;
 
@@ -16,9 +17,6 @@ require("./Db/Connection")
 app.use(require("./router/auth"))
 
 
-
-
-
 const MiddleWare=(req,res,next)=>{
     console.log("middle ware");
     next()
@@ -27,7 +25,6 @@ const MiddleWare=(req,res,next)=>{
 app.get("/", MiddleWare, (req,res)=>{
     res.send("hello  world")
 })
-
 
 
 

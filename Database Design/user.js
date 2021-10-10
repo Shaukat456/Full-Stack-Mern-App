@@ -1,41 +1,51 @@
-const mongoose =require("mongoose");
-const bcrypt= require("bcryptjs")
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 
-const UserSchema =new mongoose.Schema({
-    name:{
-        type:String,
-        required:true,
+
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
     },
-    email:{
-        type:String,
-        required:true,
+    email: {
+        type: String,
+        required: true,
     },
-    password:{
-        type:String,
-        required:true,
+    password: {
+        type: String,
+        required: true,
     },
-    confpassword:{
-        type:String,
-        required:true,
-    }
-    
+    confpassword: {
+        type: String,
+        required: true,
+    },
+    tokens: [
+        {
+            token: {
+                type: String,
+                required: true,
+            },
+        }
+    ]
+
 
 })
 
 
-UserSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
     try {
         if (!this.isModified("password")) {
-          return next();
+            return next();
         }
         let hashedPassword = await bcrypt.hash(this.password, 10);
         this.password = hashedPassword;
         return next();
     } catch (err) {
         return next(err);
-   }
-  });
+    }
+});
 
 //('preMethod')
 // if(this.isModified("password")){
@@ -50,8 +60,18 @@ UserSchema.pre("save", async function(next) {
 // res.send("pre method called")
 // })
 
+userSchema.methods.genAuthToken() = async function () {
+    try {
+        let token = jwt.sign({ _id: this._id }, "MynAmeiz");
+        this.tokens = await this.tokens.concat({ token})
+        await this.save()
+        return token;
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 
-const User=mongoose.model("USER",  UserSchema )
+const User = mongoose.model("USER", userSchema)
 
-module.exports=User;
+module.exports = User;

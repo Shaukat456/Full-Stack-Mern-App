@@ -1,6 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
+const jwt=require("jsonwebtoken")
 
 const User = require("../Database Design/user");
 
@@ -44,8 +45,10 @@ router.post("/register", (req, res) => {
 router.post("/signin", async (req, res) => {
   // console.log(req.body)
   try {
+    let  token;
     const { email, password } = req.body;
 
+    // If empty or wrong
     if (!email || !password) {
       return res.status(400).json({ error: "LOGIN ERROR" });
     }
@@ -53,10 +56,16 @@ router.post("/signin", async (req, res) => {
     const UserLogin = await User.findOne({ email: email });
     console.log(UserLogin);
 
+
+
+    
     // db pass, user password
 
     if (UserLogin) {
       const IsMatch = await bcrypt.compare(password, UserLogin.password);
+     token =await  UserLogin.genAuthToken();
+     console.log(token)
+     
       if (!IsMatch) {
         res.json({ error: "Invlid Info" });
       } else {
@@ -69,5 +78,6 @@ router.post("/signin", async (req, res) => {
     console.log("error");
   }
 });
+
 
 module.exports = router;
