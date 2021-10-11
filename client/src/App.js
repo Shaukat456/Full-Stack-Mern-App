@@ -7,8 +7,8 @@ function App() {
   return (
   <>
   <Navbar/>
-  <nav>asdasdas</nav>
-  sadas
+  
+
   </>
   );
 }
