@@ -9,17 +9,15 @@ const history=useHistory()
     });
 
     let name,value;
+
     function HandleInputs(e){
-      console.log(e.target.value)
+        
       
       name=e.target.name;
       value=e.target.value
       
       setVisitor({...Visitor,[name]:value})
-      // setVisitor({
-      //   ...Visitor
-      // })
-        
+      
 
 
     
@@ -31,6 +29,7 @@ const history=useHistory()
         b.preventDefault()
 
         const [name ,email,password,contact]=Visitor;
+        console.log(name)
 
       const resp= await fetch('/register',{
          method:"POST",
@@ -39,7 +38,7 @@ const history=useHistory()
          },
          body:JSON.stringify({ 
 
-          name ,email,password,contact
+          name:name ,email:email,password:password,contact:contact
          })
          
        })

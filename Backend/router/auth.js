@@ -10,9 +10,9 @@ router.get("/", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  const { name, email, password, confpassword } = req.body;
+  const { name, email, password, contact } = req.body;
 
-  if (!name || !email || !password || !confpassword) {
+  if (!name || !email || !password || !contact) {
     return res.send("please fill all the fields");
   }
 
@@ -21,7 +21,7 @@ router.post("/register", (req, res) => {
       return res.status(422).json({ error: "Email already exists" });
     }
 
-    const user = new User({ name, email, password, confpassword });
+    const user = new User({ name, email, password, contact });
 
     user
       .save()
@@ -42,42 +42,42 @@ router.post("/register", (req, res) => {
   
             // Login Route
 
-router.post("/signin", async (req, res) => {
-  // console.log(req.body)
-  try {
-    let  token;
-    const { email, password } = req.body;
+// router.post("/signin", async (req, res) => {
+//   // console.log(req.body)
+//   try {
+//     let  token;
+//     const { email, password } = req.body;
 
-    // If empty or wrong
-    if (!email || !password) {
-      return res.status(400).json({ error: "LOGIN ERROR" });
-    }
+//     // If empty or wrong
+//     if (!email || !password) {
+//       return res.status(400).json({ error: "LOGIN ERROR" });
+//     }
 
-    const UserLogin = await User.findOne({ email: email });
-    console.log(UserLogin);
+//     const UserLogin = await User.findOne({ email: email });
+//     console.log(UserLogin);
 
 
 
     
     // db pass, user password
 
-    if (UserLogin) {
-      const IsMatch = await bcrypt.compare(password, UserLogin.password);
-     token =await  UserLogin.genAuthToken();
-     console.log(token)
+//     if (UserLogin) {
+//       const IsMatch = await bcrypt.compare(password, UserLogin.password);
+//      token =await  UserLogin.genAuthToken();
+//      console.log(token)
      
-      if (!IsMatch) {
-        res.json({ error: "Invlid Info" });
-      } else {
-        res.json({ message: "Login Done" });
-      }
-    } else {
-      res.json({ error: "Invlid Info" });
-    }
-  } catch (err) {
-    console.log("error");
-  }
-});
+//       if (!IsMatch) {
+//         res.json({ error: "Invlid Info" });
+//       } else {
+//         res.json({ message: "Login Done" });
+//       }
+//     } else {
+//       res.json({ error: "Invlid Info" });
+//     }
+//   } catch (err) {
+//     console.log("error");
+//   }
+// });
 
 
 module.exports = router;
