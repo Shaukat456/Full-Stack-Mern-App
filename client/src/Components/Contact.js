@@ -1,16 +1,58 @@
 import { useState } from "react";
+import { useHistory } from "react-router";
 
 function Contact() {
-    const [Visitor,setVisitor]=useState({
+
+const history=useHistory()
+  const [Visitor,setVisitor]=useState({
         name:"",email:"",password:"",contact:"",
     });
 
+    let name,value;
     function HandleInputs(e){
-        setVisitor(e.target.value)
-        console.log(e.target.value)
+      console.log(e.target.value)
+      
+      name=e.target.name;
+      value=e.target.value
+      
+      setVisitor({...Visitor,[name]:value})
+      // setVisitor({
+      //   ...Visitor
+      // })
+        
+
+
+    
+
+
     }
-    function Submission(b){
+
+    const  Submission =async(b)=>{
         b.preventDefault()
+
+        const [name ,email,password,contact]=Visitor;
+
+      const resp= await fetch('/register',{
+         method:"POST",
+         headers:{
+           "Content-Type":"application/json"
+         },
+         body:JSON.stringify({ 
+
+          name ,email,password,contact
+         })
+         
+       })
+       const data=await resp.json()
+
+       if(resp.status===422|| !data){
+         window.alert("invalid Registration")
+         console.log("invalid Registration")
+       }else{
+        window.alert("successfull Registration")
+        console.log("successfull Registration")
+       }
+      history.push('/Home')
     }
 
 
@@ -20,23 +62,23 @@ function Contact() {
 
 <form>
   <div class="form-group ">
-    <label for="staticEmail" class="col-sm-2 col-form-label">NAME</label>
+    <label htmlFor="staticEmail" class="col-sm-2 col-form-label">NAME</label>
     <div class="col-sm-10">
-      <input type="text" readonly class="form-control-plaintext" id="staticEmail" value={Visitor.name}   onChange={HandleInputs}  />
+      <input type="text"   name='name'  class="form-control-plaintext" id="staticEmail" value={Visitor.name}   onChange={HandleInputs}  />
     </div>
   </div>
   <div class="form-group col">
-    <label for="inputPassword" class="col-sm-2 col-form-label">EMAIL</label>
+    <label htmlFor="inputPassword" class="col-sm-2 col-form-label">EMAIL</label>
     <div class="col-sm-5">
-      <input type="email" class="form-control" id="inputPassword"  onChange={HandleInputs} value={Visitor.email}   placeholder="email" />
+      <input type="email" name='email'  class="form-control" id="inputPassword"  onChange={HandleInputs} value={Visitor.email}   placeholder="email" />
     </div>
-    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+    <label htmlFor="inputPassword" class="col-sm-2 col-form-label">Password</label>
     <div class="col-sm-5">
-      <input type="password" class="form-control" id="inputPassword"  onChange={HandleInputs}  value={Visitor.password}  placeholder="Password" />
+      <input type="password"  name='password' class="form-control" id="inputPassword"  onChange={HandleInputs}  value={Visitor.password}  placeholder="Password" />
     </div>
-    <label for="inputPassword" class="col-sm-2 col-form-label"> Contact</label>
+    <label htmlFor="inputPassword" class="col-sm-2 col-form-label"> Contact</label>
     <div class="col-sm-5">
-      <input type="password" class="form-control" id="inputPassword"  onChange={HandleInputs} value={Visitor.contact}  placeholder="Contact" />
+      <input type="password"  name='contact' class="form-control" id="inputPassword"  onChange={HandleInputs} value={Visitor.contact}  placeholder="Contact" />
     </div>
     <button type="submit" class="btn btn-info mx-auto my-5" onClick={Submission}  >Submit</button>
 
